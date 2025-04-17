@@ -6,6 +6,7 @@ import 'package:bayi_geliyo_mobile_application/controller/extension/datetime_ext
 import 'package:bayi_geliyo_mobile_application/controller/extension/future_extensions.dart';
 import 'package:bayi_geliyo_mobile_application/controller/extension/int_extensions.dart';
 import 'package:bayi_geliyo_mobile_application/controller/extension/widget_extensions.dart';
+import 'package:bayi_geliyo_mobile_application/controller/handler/app_handler.dart';
 import 'package:bayi_geliyo_mobile_application/controller/handler/paid_handler.dart';
 import 'package:bayi_geliyo_mobile_application/controller/style/button.dart';
 import 'package:bayi_geliyo_mobile_application/controller/style/decoration.dart';
@@ -80,7 +81,7 @@ class _PaymentSummaryPageState extends State<PaymentSummaryPage> {
         _dottedLine(),
         Text("${PaidHandler.instance.baseModel.amountType?.name.tr()}", style: context.textTheme.bodyLarge?.copyWith(color: context.colors.onSurface)),
         _dottedLine(),
-        Text("${PaidHandler.instance.baseModel.amount}", style: context.textTheme.bodyLarge?.copyWith(color: context.colors.onSurface)),
+        Text("${PaidHandler.instance.baseModel.amount} ${AppHandler.instance.getCurrentSymbol(PaidHandler.instance.baseModel.currency!)}", style: context.textTheme.bodyLarge?.copyWith(color: context.colors.onSurface)),
         _divider(),
         _title(title: "${"customer_demands".tr()} (${"optional".tr()})"),
         if (PaidHandler.instance.baseModel.customerDemands != null)
@@ -115,7 +116,7 @@ class _PaymentSummaryPageState extends State<PaymentSummaryPage> {
         _dottedLine(),
         Text("${PaidHandler.instance.baseModel.amountType?.name.tr()}", style: context.textTheme.bodyLarge?.copyWith(color: context.colors.onSurface)),
         _dottedLine(),
-        Text("${PaidHandler.instance.baseModel.amount}", style: context.textTheme.bodyLarge?.copyWith(color: context.colors.onSurface)),
+        Text("${PaidHandler.instance.baseModel.amount} ${AppHandler.instance.getCurrentSymbol(PaidHandler.instance.baseModel.currency!)}", style: context.textTheme.bodyLarge?.copyWith(color: context.colors.onSurface)),
         _divider(),
         _title(title: "credit_card".tr()),
         Column(

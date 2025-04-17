@@ -40,6 +40,12 @@ class _PaymentPageState extends State<PaymentPage> {
     super.dispose();
   }
 
+  void _next(bool pass) {
+    if (pass) {
+      _paymentViewIndexNotifier.value++;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
@@ -169,68 +175,30 @@ class _PaymentPageState extends State<PaymentPage> {
 
   Widget _view() {
     return ClipRRect(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(AppDecoration.radius * 2)),
+      borderRadius: BorderRadius.vertical(
+        top: Radius.circular(AppDecoration.radius * 2),
+      ),
       child: Builder(
         builder: (context) {
           switch (_paymentViewIndexNotifier.value) {
             case 0:
-              return PaymentViewStage0(
-                callback: (pass) {
-                  if (pass) {
-                    _paymentViewIndexNotifier.value++;
-                  }
-                },
-              );
+              return PaymentViewStage0(callback: _next);
             case 1:
-              return PaymentViewStage1(
-                callback: (pass) {
-                  if (pass) {
-                    _paymentViewIndexNotifier.value++;
-                  }
-                },
-              );
+              return PaymentViewStage1(callback: _next);
             case 2:
-              return PaymentViewStage2(
-                callback: (pass) {
-                  if (pass) {
-                    _paymentViewIndexNotifier.value++;
-                  }
-                },
-              );
+              return PaymentViewStage2(callback: _next);
             case 3:
-              return PaymentViewStage3(
-                callback: (pass) {
-                  if (pass) {
-                    _paymentViewIndexNotifier.value++;
-                  }
-                },
-              );
+              return PaymentViewStage3(callback: _next);
             case 4:
-              return PaymentViewStage4(
-                callback: (pass) {
-                  if (pass) {
-                    _paymentViewIndexNotifier.value++;
-                  }
-                },
-              );
+              return PaymentViewStage4(callback: _next);
             case 5:
-              return PaymentViewStage5(
-                callback: (pass) {
-                  if (pass) {
-                    _paymentViewIndexNotifier.value++;
-                  }
-                },
-              );
+              return PaymentViewStage5(callback: _next);
             case 6:
-              return PaymentViewStage6(
-                callback: (pass) {
-                  if (pass) {
-                    Navigator.pushNamed(context, AppRoutes.payment_summary_page);
-                  }
-                },
-              );
+              return PaymentViewStage6(callback: (pass) {
+                if (pass) Navigator.pushNamed(context, AppRoutes.payment_summary_page);
+              });
             default:
-              return SizedBox();
+              return const SizedBox.shrink();
           }
         },
       ),

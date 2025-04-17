@@ -94,7 +94,7 @@ class AppHandler {
       case "Türk Lirası":
         return "₺";
       case "Dolar":
-        return "-";
+        return "\$";
       case "Euro":
         return "€";
       default:

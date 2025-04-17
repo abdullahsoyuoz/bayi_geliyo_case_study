@@ -1,7 +1,9 @@
+import 'package:bayi_geliyo_mobile_application/controller/constant/formatter.dart';
 import 'package:bayi_geliyo_mobile_application/controller/extension/bool_extensions.dart';
 import 'package:bayi_geliyo_mobile_application/controller/extension/color_extensions.dart';
 import 'package:bayi_geliyo_mobile_application/controller/extension/context_extensions.dart';
 import 'package:bayi_geliyo_mobile_application/controller/extension/widget_extensions.dart';
+import 'package:bayi_geliyo_mobile_application/controller/handler/app_handler.dart';
 import 'package:bayi_geliyo_mobile_application/controller/handler/paid_handler.dart';
 import 'package:bayi_geliyo_mobile_application/controller/style/colors.dart';
 import 'package:bayi_geliyo_mobile_application/controller/style/decoration.dart';
@@ -111,14 +113,22 @@ class _PaymentViewStage3State extends State<PaymentViewStage3> {
                   ).wrapPaddingSymetric(horizontal: 12);
                 }),
           ).wrapPadding(bottom: AppDecoration.padding),
-          TextField(
-            controller: _amountController,
-            focusNode: _amountNode,
-            textInputAction: TextInputAction.done,
-            keyboardType: TextInputType.numberWithOptions(decimal: true),
-            decoration: InputDecoration(hintText: "enter_of_param".tr(args: ["amount".tr()])),
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          ).wrapPadding(bottom: AppDecoration.padding),
+          ValueListenableBuilder(
+              valueListenable: _selectedCurrenyNotifier,
+              builder: (context, _, __) {
+                return TextField(
+                  // controller: _amountController,
+                  focusNode: _amountNode,
+                  textInputAction: TextInputAction.done,
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  decoration: InputDecoration(hintText: "enter_of_param".tr(args: ["amount".tr()])),
+                  controller: TextEditingController(text: currencyFormatter(symbol: AppHandler.instance.getCurrentSymbol(_selectedCurrenyNotifier.value ?? "")).formatString(_amountController.text)),
+                  inputFormatters: [currencyFormatter()],
+                  onChanged: (value) {
+                    _amountController.text = value;
+                  },
+                ).wrapPadding(bottom: AppDecoration.padding);
+              }),
         ],
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:bayi_geliyo_mobile_application/controller/constant/formatter.dart';
 import 'package:bayi_geliyo_mobile_application/controller/extension/bool_extensions.dart';
 import 'package:bayi_geliyo_mobile_application/controller/extension/color_extensions.dart';
 import 'package:bayi_geliyo_mobile_application/controller/extension/context_extensions.dart';
@@ -8,6 +9,7 @@ import 'package:bayi_geliyo_mobile_application/view/widget/dialog/constructor.da
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:validatorless/validatorless.dart';
 
 class PaymentViewStage1 extends StatefulWidget {
   const PaymentViewStage1({super.key, required this.callback});
@@ -18,22 +20,18 @@ class PaymentViewStage1 extends StatefulWidget {
 }
 
 class _PaymentViewStage1State extends State<PaymentViewStage1> {
-  late TextEditingController _nameSurnameController;
-  late FocusNode _nameSurnameNode;
-  late TextEditingController _mailController;
-  late FocusNode _mailNode;
-  late TextEditingController _phoneController;
-  late FocusNode _phoneNode;
+  final TextEditingController _nameSurnameController = TextEditingController();
+  final FocusNode _nameSurnameNode = FocusNode();
+  final TextEditingController _mailController = TextEditingController();
+  final FocusNode _mailNode = FocusNode();
+  final TextEditingController _phoneController = TextEditingController();
+  final FocusNode _phoneNode = FocusNode();
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    _nameSurnameController = TextEditingController();
-    _nameSurnameNode = FocusNode();
-    _mailController = TextEditingController();
-    _mailNode = FocusNode();
-    _phoneController = TextEditingController();
-    _phoneNode = FocusNode();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
   }
 
@@ -54,34 +52,41 @@ class _PaymentViewStage1State extends State<PaymentViewStage1> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         bottomNavigationBar: _bottomNowBar(context),
-        body: ListView(
-          controller: ScrollController(initialScrollOffset: -context.height),
-          padding: EdgeInsets.all(AppDecoration.padding),
-          children: [
-            Text("info_of_param".tr(args: ["recipient".tr()])).wrapPadding(bottom: AppDecoration.padding),
-            TextField(
-              controller: _nameSurnameController,
-              focusNode: _nameSurnameNode,
-              textInputAction: TextInputAction.next,
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(hintText: "name_surname".tr()),
-            ).wrapPadding(bottom: AppDecoration.padding),
-            TextField(
-              controller: _mailController,
-              focusNode: _mailNode,
-              textInputAction: TextInputAction.next,
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(hintText: "mail_address".tr()),
-            ).wrapPadding(bottom: AppDecoration.padding),
-            TextField(
-              controller: _phoneController,
-              focusNode: _phoneNode,
-              textInputAction: TextInputAction.done,
-              keyboardType: TextInputType.numberWithOptions(decimal: false, signed: true),
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              decoration: InputDecoration(hintText: "mobile_phone".tr()),
-            ),
-          ],
+        body: Form(
+          key: _formKey,
+          child: ListView(
+            controller: ScrollController(initialScrollOffset: -context.height),
+            padding: EdgeInsets.all(AppDecoration.padding),
+            children: [
+              Text("info_of_param".tr(args: ["recipient".tr()])).wrapPadding(bottom: AppDecoration.padding),
+              TextField(
+                controller: _nameSurnameController,
+                focusNode: _nameSurnameNode,
+                textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(hintText: "name_surname".tr()),
+              ).wrapPadding(bottom: AppDecoration.padding),
+              TextFormField(
+                controller: _mailController,
+                focusNode: _mailNode,
+                textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.emailAddress,
+                decoration: InputDecoration(
+                  hintText: "mail_address".tr(),
+                ),
+                validator: Validatorless.multiple([Validatorless.email("")]),
+              ).wrapPadding(bottom: AppDecoration.padding),
+              TextFormField(
+                controller: _phoneController,
+                focusNode: _phoneNode,
+                textInputAction: TextInputAction.done,
+                keyboardType: TextInputType.numberWithOptions(decimal: false, signed: true),
+                inputFormatters: [AppFormatter.phone],
+                decoration: InputDecoration(hintText: "mobile_phone".tr()),
+                validator: Validatorless.multiple([Validatorless.length(17, "")]),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -112,7 +117,7 @@ class _PaymentViewStage1State extends State<PaymentViewStage1> {
   }
 
   void _submitController() {
-    if (_nameSurnameController.text.isNotEmpty && _mailController.text.isNotEmpty && _phoneController.text.isNotEmpty) {
+    if (_nameSurnameController.text.isNotEmpty && _mailController.text.isNotEmpty && _phoneController.text.isNotEmpty && _formKey.currentState!.validate()) {
       //
       FocusScope.of(context).unfocus();
       //
