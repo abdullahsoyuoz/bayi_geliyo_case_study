@@ -8,7 +8,6 @@ import 'package:bayi_geliyo_mobile_application/controller/style/decoration.dart'
 import 'package:bayi_geliyo_mobile_application/view/widget/dialog/constructor.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:validatorless/validatorless.dart';
 
 class PaymentViewStage1 extends StatefulWidget {

@@ -1,4 +1,5 @@
 // ignore_for_file: unnecessary_null_comparison, use_build_context_synchronously
+import 'package:bayi_geliyo_mobile_application/controller/constant/preferences.dart';
 import 'package:bayi_geliyo_mobile_application/controller/constant/routes.dart';
 import 'package:bayi_geliyo_mobile_application/controller/handler/token_preference_handler.dart';
 import 'package:bayi_geliyo_mobile_application/rest/controller/auth/auth_controller.dart';
@@ -9,6 +10,7 @@ import 'package:bayi_geliyo_mobile_application/view/widget/dialog/constructor.da
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthHandler {
   static AuthHandler? _instance;
@@ -22,7 +24,11 @@ class AuthHandler {
         await Provider.of<AuthController>(context, listen: false).login(context, entity: loginRaw).then((response) async {
           if (response is OkResponse && response.body != null && response.body["token"] != null) {
             if (rememberMe) {
-              TokenPreferenceHandler.instance.setToken(response.body["token"]);
+              await TokenPreferenceHandler.instance.setToken(response.body["token"]);
+              await SharedPreferences.getInstance().then((preferences) {
+                preferences.setString(AppPreferences.identity.name, identity);
+                preferences.setString(AppPreferences.password.name, password);
+              });
             } else {
               TokenPreferenceHandler.instance.clearToken();
             }
@@ -54,7 +60,22 @@ class AuthHandler {
   Future<void> autoLogin(BuildContext context, {bool identityControl = true}) async {
     TokenPreferenceHandler.instance.getToken().then((token) async {
       if (token != null) {
-        await loginInitialize(context);
+        await SharedPreferences.getInstance().then((preferences) async {
+          await login(
+            context,
+            preferences.getString(AppPreferences.identity.name) ?? "",
+            preferences.getString(AppPreferences.password.name) ?? "",
+            true,
+          ).then(
+            (value) async {
+              if (value != null && value) {
+                await loginInitialize(context);
+              } else {
+                Navigator.pushNamedAndRemoveUntil(context, AppRoutes.auth_view, (route) => false);
+              }
+            },
+          );
+        });
       } else {
         Navigator.pushNamedAndRemoveUntil(context, AppRoutes.auth_view, (route) => false);
       }
