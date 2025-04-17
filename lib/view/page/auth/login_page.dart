@@ -32,9 +32,9 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    _identityController = TextEditingController(text: "eve.holt@reqres.in");
+    _identityController = TextEditingController();
     _identityNode = FocusNode();
-    _passwordController = TextEditingController(text: "cityslicka");
+    _passwordController = TextEditingController();
     _passwordNode = FocusNode();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       //

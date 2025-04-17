@@ -72,8 +72,13 @@ class _PaymentSummaryPageState extends State<PaymentSummaryPage> {
         _title(title: "settings_param".tr(args: ["link".tr()])),
         Text("${PaidHandler.instance.baseModel.linkTitle}", style: context.textTheme.bodyLarge?.copyWith(color: context.colors.onSurface)),
         _dottedLine(),
-        Text("${PaidHandler.instance.baseModel.linkDescription}", style: context.textTheme.bodyLarge?.copyWith(color: context.colors.onSurface)),
-        _dottedLine(),
+        if (PaidHandler.instance.baseModel.linkDescription != null && PaidHandler.instance.baseModel.linkDescription!.isNotEmpty)
+          Column(
+            children: [
+              Text("${PaidHandler.instance.baseModel.linkDescription}", style: context.textTheme.bodyLarge?.copyWith(color: context.colors.onSurface)),
+              _dottedLine(),
+            ],
+          ),
         Text("${PaidHandler.instance.baseModel.language}", style: context.textTheme.bodyLarge?.copyWith(color: context.colors.onSurface)),
         _divider(),
         _title(title: "amount".tr()),
