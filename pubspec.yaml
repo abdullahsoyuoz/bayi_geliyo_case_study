@@ -1,0 +1,66 @@
+name: bayi_geliyo_mobile_application
+description: "flutter_case_study"
+publish_to: 'none'
+
+version: 1.0.0
+
+environment:
+  sdk: ">=3.6.0 <4.0.0"
+
+dependencies:
+  cupertino_icons: any
+  currency_text_input_formatter: ^2.3.0
+  dotted_line: ^3.2.3
+  easy_localization: ^3.0.7+1
+  flutter:
+    sdk: flutter
+  flutter_animate: ^4.5.0
+  flutter_bouncing_widgets: ^1.0.3
+  flutter_native_splash: ^2.4.6
+  font_awesome_flutter: ^10.8.0
+  hive: any
+  hive_flutter: any
+  http: any
+  image: any
+  intl: any
+  lottie: ^3.3.1
+  path_provider: ^2.1.5
+  provider: any
+  shared_preferences: any
+  uuid: any
+
+dev_dependencies:
+  flutter_lints: ^5.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/animation/
+    - assets/flag/
+    - assets/icon/
+    - assets/image/
+    - assets/logo/
+    - assets/logo/on_dark/
+    - assets/logo/on_light/
+    - assets/translations/
+
+flutter_sdk:
+  enabled: true
+  androidHardwareAcceleration: false #hardware acceleration for android
+  iosEnableMetal: false #hardware acceleration for ios
+
+#run 👉🏻 dart run flutter_native_splash:create
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: assets/image/splash_light_r.png
+  color_dark: "#005681"
+  image_dark: assets/image/splash_dark_r.png
+
+android_12:
+  image: assets/image/splash_light_r.png
+  icon_background_color: "#FFFFFF"
+  image_dark: assets/image/splash_dark_r.png
+  icon_background_color_dark: "#005681"
